@@ -1,26 +1,54 @@
-import React, { useContext } from "react";
-import { Image, View, Text, Pressable } from "react-native";
+import React, { useContext, useState } from "react";
+import { Image, View, Text, Pressable, FlatList, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CreateContext } from "./CreateContext";
 
-const CarScreen = () => {
+const ColorScreen = () => {
   const stars = [1, 2, 3, 4, 5];
-
+  const charTypes = [
+    {
+      color: require("../assets/Rectangle_4.png"),
+      image: require("../assets/vs_silver.png"),
+      name: "Điện Thoại Vsmart Joy 3 Hàng chính hãng",
+    },
+  ];
+  const reviews= [
+    {
+      id: 1,
+      name: "Nguyễn Văn A",
+      text: "Sản phẩm tốt, nhận được hàng nhanh chóng",
+      rating: 3,
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 2,
+      name: "Nguyễn Văn B",
+      text: "Sản phẩm tốt, nhận được hàng nhanh chóng",
+      rating: 5,
+      image: "https://picsum.photos/200/300",
+    },
+  ];
+  const [showReviews, setShowReviews] = useState(false);
+  const [currentCharType, setCurrentCharType] = useState(charTypes[0]);
+  const { selectedColor, selectedPrice } = useContext(CreateContext);
   const navigation = useNavigation();
+
   const handleColorScreen = () => {
     navigation.navigate("ColorScreen");
   };
-
-  const { selectedColor, selectedPrice } = useContext(CreateContext);
+  const renderStars = (rating) => {
+    return '★'.repeat(rating);
+  };
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={{ margin: 20 }}>
+   <ScrollView>
+     <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{marginHorizontal: 20}}>
         <Image
           style={{ height: 300, resizeMode: "contain", marginTop: 20 }}
-          source={selectedColor || require("../assets/vs_silver.png")}
+          source={selectedColor || currentCharType.image}
         />
         <Text style={{ marginTop: 20, fontWeight: "bold", fontSize: 20 }}>
-          Dien thoai Vsmart Joy 3
+          {currentCharType.name}
         </Text>
         <View
           style={{
@@ -36,13 +64,16 @@ const CarScreen = () => {
               source={require("../assets/star.png")}
             />
           ))}
-          <Text style={{ marginLeft: 80 }}>(Xem 828 đánh giá)</Text>
+          <Pressable onPress={() => setShowReviews(!showReviews)}>
+            <Text style={{ marginLeft: 80 }}>(Xem 828 đánh giá)</Text>
+          </Pressable>
         </View>
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 20 }}
         >
-          <Text style={{ color: "red", fontSize: 16 }}>{selectedPrice}</Text>
-          <Text
+          {!showReviews && (<Text style={{ color: "red", fontSize: 16 }}>{selectedPrice}</Text>
+         )}
+          {!showReviews && (<Text
             style={{
               color: "gray",
               marginLeft: 20,
@@ -50,12 +81,32 @@ const CarScreen = () => {
             }}
           >
             1.990.000 đ
-          </Text>
+          </Text>)}
         </View>
-        <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>
+        {/* Hiển thị đánh giá */}
+        {showReviews && (
+          <FlatList
+          
+            data={reviews}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={{marginVertical: 10 }}>
+                <Text style={{ fontWeight: "bold", marginTop: 10 }}>{item.name}</Text>
+                <Text style={{marginTop: 10 }}>{item.text}</Text>
+                <Image
+                  style={{ width: 100, height: 100 ,marginTop: 10 }}
+                  source={{ uri: item.image }}
+                />
+                <Text style={{color: "#f1c40f",marginTop: 10}}>{renderStars(item.rating)}</Text>
+              </View>
+              
+            )}
+          />
+        )}
+       {!showReviews && ( <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>
           Ở ĐÂU RẺ HƠN HOÀN TIỀN
-        </Text>
-        <View
+        </Text>)}
+        {!showReviews && (<View
           style={{
             borderColor: "#00000",
             borderWidth: 1,
@@ -71,7 +122,7 @@ const CarScreen = () => {
               4 MÀU-CHỌN MÀU
             </Text>
           </Pressable>
-        </View>
+        </View>)}
         <Pressable
           style={{
             backgroundColor: "red",
@@ -86,7 +137,8 @@ const CarScreen = () => {
         </Pressable>
       </View>
     </View>
+   </ScrollView>
   );
 };
 
-export default CarScreen;
+export default ColorScreen;
