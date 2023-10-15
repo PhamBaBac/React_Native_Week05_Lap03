@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+
+import React, { useContext} from "react";
 import { View, Text, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CreateContext } from "./CreateContext";
@@ -40,8 +41,14 @@ const ColorScreen = () => {
   ];
 
   const navigation = useNavigation();
-  const [currentCharType, setCurrentCharType] = useState(charTypes[0]);
-  const { setSelectedColor, setSelectedPrice } = useContext(CreateContext);
+  const { selectedColor, selectedPrice,selectedColorName } = useContext(CreateContext);
+  const { setSelectedColor, setSelectedPrice, setSelectedColoName} = useContext(CreateContext);
+
+  const selectColor = (charType) => {
+    setSelectedColor(charType.image);
+    setSelectedPrice(charType.price);
+    setSelectedColoName(charType.colorName);
+  };
 
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
@@ -57,7 +64,7 @@ const ColorScreen = () => {
               height: 140,
               resizeMode: "contain",
             }}
-            source={currentCharType.image}
+            source={selectedColor || charTypes[0].image}
           />
         </View>
         <View
@@ -68,21 +75,21 @@ const ColorScreen = () => {
             margin: 10,
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>{currentCharType.name}</Text>
+          <Text style={{ fontWeight: "bold" }}>{charTypes[0].name}</Text>
           <Text>
             Màu :{" "}
             <Text style={{ fontWeight: "bold" }}>
               {" "}
-              {currentCharType.colorName}
+              {selectedColorName || charTypes[0].colorName}
             </Text>
           </Text>
           <Text>
             Cung cấp bởi{" "}
             <Text style={{ fontWeight: "bold" }}>
-              {currentCharType.provider}
+              {charTypes[0].provider}
             </Text>
           </Text>
-          <Text style={{ color: "red" }}>{currentCharType.price}</Text>
+          <Text style={{ color: "red" }}>{selectedPrice || charTypes[0].price}</Text>
         </View>
       </View>
       <Text
@@ -95,7 +102,7 @@ const ColorScreen = () => {
           style={{
             flex: 1,
           }}
-          onPress={() => setCurrentCharType(charType)}
+          onPress={() => selectColor(charType)}
           key={index}
         >
           <Image
@@ -123,8 +130,6 @@ const ColorScreen = () => {
             marginTop: 20,
           }}
           onPress={() => {
-            setSelectedColor(currentCharType.image);
-            setSelectedPrice(currentCharType.price);
             navigation.goBack();
           }}
         >

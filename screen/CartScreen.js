@@ -36,7 +36,6 @@ const CartScreen = () => {
     },
   ];
   const [showReviews, setShowReviews] = useState(false);
-  const [currentCharType, setCurrentCharType] = useState(charTypes[0]);
   const { selectedColor, selectedPrice } = useContext(CreateContext);
 
   const navigation = useNavigation();
@@ -53,10 +52,10 @@ const CartScreen = () => {
         <View style={{ marginHorizontal: 20 }}>
           <Image
             style={{ height: 300, resizeMode: "contain", marginTop: 20 }}
-            source={selectedColor || currentCharType.image}
+            source={selectedColor || charTypes[0].image}
           />
           <Text style={{ marginTop: 20, fontWeight: "bold", fontSize: 20 }}>
-            {currentCharType.name}
+            {charTypes[0].name}
           </Text>
           <View
             style={{

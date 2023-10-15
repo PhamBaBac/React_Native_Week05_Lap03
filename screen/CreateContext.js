@@ -5,6 +5,7 @@ export const CreateContext = createContext();
 export const Provider = ({ children }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState("1.490.000 đ");
+  const [selectedColorName, setSelectedColoName] = useState(null);
 
   return (
     <CreateContext.Provider
@@ -13,6 +14,8 @@ export const Provider = ({ children }) => {
         setSelectedColor,
         selectedPrice,
         setSelectedPrice,
+        selectedColorName,
+        setSelectedColoName,
       }}
     >
       {children}
