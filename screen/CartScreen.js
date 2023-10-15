@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { CreateContext } from "./CreateContext";
 
-const ColorScreen = () => {
+const CartScreen = () => {
   const stars = [1, 2, 3, 4, 5];
   const charTypes = [
     {
@@ -38,6 +38,7 @@ const ColorScreen = () => {
   const [showReviews, setShowReviews] = useState(false);
   const [currentCharType, setCurrentCharType] = useState(charTypes[0]);
   const { selectedColor, selectedPrice } = useContext(CreateContext);
+
   const navigation = useNavigation();
 
   const handleColorScreen = () => {
@@ -103,7 +104,6 @@ const ColorScreen = () => {
           {showReviews && (
             <FlatList
               data={reviews}
-              keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <View style={{ marginVertical: 10 }}>
                   <Text style={{ fontWeight: "bold", marginTop: 10 }}>
@@ -166,4 +166,4 @@ const ColorScreen = () => {
   );
 };
 
-export default ColorScreen;
+export default CartScreen;
